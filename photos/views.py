@@ -4,4 +4,4 @@ from django.http import HttpResponse
 # Create your views here.
 
 def welcome(request):
-    return HttpResponse("Instagram")
+    return render (request, "welcome.html")
