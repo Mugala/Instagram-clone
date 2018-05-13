@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  {% if title %}
+  <title>Instagram Clone - {{title}}</title>
+  {% else %}
+    <title> Instagram Clone </title>
+  {% endif %}
+
+</head>
+<body>
+    {% block content %} <h1>Welcome to IG clone</h1> {%endblock%}
+</body>
+</html>
