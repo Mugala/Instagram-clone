@@ -20,8 +20,7 @@ class Image (models.Model):
    # post_image = models.ImageField(upload_to = 'my-photos/', null=True)
     
 
-class Comment(models.Model):
-    user_comment = models.CharField(max_length =200)
+
 
 
 
