@@ -7,4 +7,4 @@ def welcome(request):
     return render (request, "welcome.html")
 
 def home(request):
-    return render (request, "home.html")
+    return render (request, "all-photos/home.html")
