@@ -18,6 +18,11 @@ class Image (models.Model):
     image_likes = models.ManyToManyField(Profile)
     pub_date = models.DateTimeField(auto_now_add=True)
     post_image = models.ImageField(upload_to = 'my-photos/', null=True)
+
+    @classmethod
+    def search_by_name(cls,search_term):
+        photos = cls.objects.filter(name__icontains=search_term)
+        return photos
     
 
 
