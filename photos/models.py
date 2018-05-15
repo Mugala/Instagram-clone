@@ -5,7 +5,7 @@ import datetime as dt
 
 
 class Profile(models.Model):
-   # pro_picture = models.ImageField(upload_to = 'profile-pics', null=True)
+    pro_picture = models.ImageField(upload_to = 'profile-pics', null=True)
     profile_bio = models.CharField(max_length =200)
 
 class Comment(models.Model):
@@ -17,7 +17,7 @@ class Image (models.Model):
     image_comment = models.ManyToManyField(Comment)
     image_likes = models.ManyToManyField(Profile)
     pub_date = models.DateTimeField(auto_now_add=True)
-   # post_image = models.ImageField(upload_to = 'my-photos/', null=True)
+    post_image = models.ImageField(upload_to = 'my-photos/', null=True)
     
 
 
