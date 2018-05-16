@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse,Http404,HttpResponseRedirect 
 import datetime as dt
 from .models import Image,WelcomeMessageRecipient
-from .forms import WelcomeMessageForm
+from .forms import WelcomeMessageForm,NewCommentForm,NewImageForm
 from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+
 
 def welcome(request):
     return render (request, "welcome.html")
-    
+
 @login_required(login_url='/accounts/login/')
 def home(request):
     date = dt.date.today
@@ -31,6 +31,9 @@ def home(request):
 
     return render (request, 'all-photos/home.html',{"pics":pics,"letterForm":form})
 
+
+def user_profile(request):
+    return render (request, "all-photos/profile.html")
 def search_results(request):
 
     if 'image' in request.GET and request.GET["image"]:
@@ -46,9 +49,25 @@ def search_results(request):
         message = "You haven't searched for any term"
         return render(request, 'all-photos/search.html',{"message":message})
 @login_required(login_url='/accounts/login/')    
-def image(request,category_id):
+def image(request,image_id):
     try:
-        image = Image.objects.get(id = category_id)
+        image = Image.objects.get(id = image_id)
     except DoesNotExist:
         raise Http404()
     return render(request,"all-photos/images.html", {"image":image})
+
+@login_required(login_url = '/accounts/login/')
+def new_image(request):
+    current_user = request.user
+    if request.method =='POST':
+        form = NewImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.user = current_user
+            image.save()
+    else:
+        form = NewImageForm()
+    return render (request, 'all-photos/new_image.html', {"form":form})
+
+
+ 
