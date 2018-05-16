@@ -4,11 +4,13 @@ import datetime as dt
 from .models import Image,WelcomeMessageRecipient
 from .forms import WelcomeMessageForm
 from .email import send_welcome_email
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def welcome(request):
     return render (request, "welcome.html")
-
+    
+@login_required(login_url='/accounts/login/')
 def home(request):
     date = dt.date.today
     pics = Image.posted_pics()
@@ -43,7 +45,7 @@ def search_results(request):
     else:
         message = "You haven't searched for any term"
         return render(request, 'all-photos/search.html',{"message":message})
-    
+@login_required(login_url='/accounts/login/')    
 def image(request,category_id):
     try:
         image = Image.objects.get(id = category_id)
