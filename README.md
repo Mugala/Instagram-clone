@@ -49,10 +49,10 @@ No known bugs
 
 
 
-#Support and contact details
+# Support and contact details
 * Email Address: `mugalalevi21@gmail.com`
 
-#License and terms of use
+## License and terms of use
 `MIT` License this application's source code is free for any open source projects
 
 © `levi` | Credits `Moringa School`
