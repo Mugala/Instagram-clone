@@ -23,6 +23,12 @@ class Image (models.Model):
     def search_by_name(cls,search_term):
         photos = cls.objects.filter(name__icontains=search_term)
         return photos
+
+    @classmethod
+    def posted_pics(cls):
+        today = dt.date.today()
+        photos = cls.objects.filter(pub_date__date = today)
+        return photos
     
 
 
