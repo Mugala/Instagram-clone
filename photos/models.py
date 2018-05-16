@@ -30,7 +30,10 @@ class Image (models.Model):
         photos = cls.objects.filter(pub_date__date = today)
         return photos
     
-
+class WelcomeMessageRecipient(models.Model):
+    name = models.CharField(max_length = 30)
+    email = models.EmailField()
+    
 
 
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse,Http404 
+from django.http import HttpResponse,Http404,HttpResponseRedirect 
 import datetime as dt
-from .models import Image
+from .models import Image,WelcomeMessageRecipient
 from .forms import WelcomeMessageForm
 from .email import send_welcome_email
 # Create your views here.
@@ -16,11 +16,18 @@ def home(request):
     if request.method =='POST':
         form = WelcomeMessageForm(request.POST)
         if form.is_valid():
-            print('valid')
+            name = form.cleaned_data['your_name']
+            email = form.cleaned_data['email']
+
+            recipient = WelcomeMessageRecipient(name=name,email=email)
+            recipient.save()
+            send_welcome_email(name,email)
+
+            HttpResponseRedirect('home')
     else:
         form = WelcomeMessageForm()
 
-    return render (request, 'all-photos/home.html',{"pics":pics,l})
+    return render (request, 'all-photos/home.html',{"pics":pics,"letterForm":form})
 
 def search_results(request):
 
