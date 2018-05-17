@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment,Image
+from .models import Comment,Image,Profile,User
 
 
 class WelcomeMessageForm(forms.Form):
@@ -9,17 +9,24 @@ class WelcomeMessageForm(forms.Form):
 class NewCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        exclude = ['image', 'pub_date']
-        widgets = {
-            'tags': forms.CheckboxSelectMultiple(),
-        }
+        fields = ['comment']
     
 class NewImageForm(forms.ModelForm):
     class Meta:
-        model = Comment
-        exclude = ['User','pub_date']
-        widgets = {
-            'tags': forms.CheckboxSelectMultiple(),
-        }
+        model = Image
+        fields = ['post_image', 'image_name', 'image_caption']
+        exclude = ['profile, user, Likes, comments']
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email')
+
+class EditProfile(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['pro_picture', 'profile_bio']
+        exclude = ['user']
+
 
         
