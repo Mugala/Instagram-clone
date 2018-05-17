@@ -16,6 +16,8 @@ def welcome(request):
 @login_required(login_url='/accounts/login/')
 def home(request):
     pics = Image.posted_pics()
+    comments = Comment.objects.all()
+    print(comments)
 
     if request.method =='POST':
         form = WelcomeMessageForm(request.POST) 
@@ -31,7 +33,7 @@ def home(request):
     else:
         form = WelcomeMessageForm()
 
-    return render (request, 'all-photos/home.html',{"pics":pics,"letterForm":form})
+    return render (request, 'all-photos/home.html',{"pics":pics,"letterForm":form, "comments":comments})
 
 
 def user_profile(request):  

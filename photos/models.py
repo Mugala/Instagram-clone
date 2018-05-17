@@ -58,7 +58,7 @@ class Comment(models.Model):
    
 
     def __str__(self):
-        return self.user.comment
+        return self.comment
 
     @classmethod
     def get_comments(cls, image_id):
