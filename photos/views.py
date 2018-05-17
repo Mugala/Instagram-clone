@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,Http404,HttpResponseRedirect 
 import datetime as dt
 from .models import Image,WelcomeMessageRecipient,Comment,Profile
@@ -15,11 +15,10 @@ def welcome(request):
 
 @login_required(login_url='/accounts/login/')
 def home(request):
-    date = dt.date.today
     pics = Image.posted_pics()
 
     if request.method =='POST':
-        form = WelcomeMessageForm(request.POST)
+        form = WelcomeMessageForm(request.POST) 
         if form.is_valid():
             name = form.cleaned_data['your_name']
             email = form.cleaned_data['email']
@@ -35,7 +34,7 @@ def home(request):
     return render (request, 'all-photos/home.html',{"pics":pics,"letterForm":form})
 
 
-def user_profile(request):
+def user_profile(request):  
     current_user = request.user
     if request.method =='POST':
         form = EditProfile(request.POST, request.FILES)
@@ -43,8 +42,10 @@ def user_profile(request):
             profile = form.save(commit=False)
             profile.user = current_user
             profile.save()
+
+            return redirect("home")
     else:
-        form = NewImageForm()
+        form = EditProfile()
     return render (request, 'all-photos/edit_profile.html',{"form":form})
 
 
@@ -99,34 +100,37 @@ def like_image(request, image_id):
 @login_required(login_url='/accounts/login/')
 def post_comment(request, image_id):
     current_user = request.user
-    photo = Image.get_photo_by_id(id=image_id)
+    photo = get_object_or_404(Image, id=image_id)
+   
     if request.method == 'POST':
-        comment_form = CreateComment(request.POST)
+        comment_form = NewCommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.image = photo
             comment.user = current_user
             comment.save()
-            HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            return redirect("home")
+            
     else:
-        comment_form = CreateComment()
+        comment_form = NewCommentForm()
 
-    comments = Comment.get_comments(image=current_image)
-    context = {"title": title, "photo": photo, "comments": comments, "comment_form": comment_form, "current_user": current_user}
-    return render(request, 'dashboard/post-comment.html', context)
+    # comments = Comment.get_comments(image=current_user)
+    # context = {"title": title, "photo": photo, "comments": comments, "comment_form": comment_form, "current_user": current_user}
+    return render(request, 'all-photos/comments.html', {"form":comment_form, "image_id": image_id})
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/accounts/login/')   
 def upload_photo(request):
     current_user = request.user
     current_profile = current_user.profile
     if request.method == 'POST':
-        uploads_form = NewImagePost(request.POST, request.FILES)
+        uploads_form = NewImageForm(request.POST, request.FILES)
         if uploads_form.is_valid():
             post = uploads_form.save(commit=False)
             post.user = current_user
             post.profile = current_profile
             post.save()
-            return redirect(user_profile, current_user.id)
+            print(post)
+            return redirect("home")
     else:
-        uploads_form = NewImagePost()
-    return render(request, 'dashboard/create_post.html', {"uploads_form": uploads_form, "current_user": current_user})
+        uploads_form = NewImageForm()
+    return render(request, 'all-photos/new_image.html', {"uploads_form": uploads_form, "current_user": current_user})

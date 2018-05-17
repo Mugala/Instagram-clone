@@ -3,14 +3,14 @@
  {% block content %}
 <div class="container">
  <div class="row">
-     <h1>Upload Image</h1>
+     <h1>Comment</h1>
      <hr>
    <div class="col-md-6"> 
      <h3>Photo</h3>
      {{form.media}}
 
-     <form action="{% url 'upload_photo' %}" method="post" enctype="multipart/form-data">
-       {% csrf_token %} {% bootstrap_form uploads_form %}
+     <form action="{% url 'post_comment' image_id %}" method="post" enctype="multipart/form-data">
+       {% csrf_token %} {% bootstrap_form form %}
        <input type="submit" class="btn btn-success" value="post" >
        <input type="hidden" name="next" value="{{next}}">
      </form>

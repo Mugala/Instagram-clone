@@ -23,7 +23,7 @@ class Image (models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     image_likes = models.ManyToManyField(User, related_name='likes', blank=True)
-    # pub_date = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField(auto_now_add=True)
     post_image = models.ImageField(upload_to = 'my-photos/', null=True)
 
     def __str__(self):
